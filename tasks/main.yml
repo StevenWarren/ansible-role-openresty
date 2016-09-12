@@ -2,13 +2,15 @@
 - stat: path=/tmp/openresty.tar.gz
   register: resty_tar
 
-- stat: path=/usr/sbin/nginx
+- stat: path={{openresty_prefix}}/nginx/sbin/nginx
   register: resty_exe
 
 # meta_end_play in 2.2 gist.github.com/jimi-c/c45b225e101fe673e42ffb719f259fbd
 - name: Check if openresty already installed...
   shell: nginx -v
   register: nginx_ver
+  failed_when:
+    - nginx_ver.rc not in [0,127]
 
 - name: Update apt
   sudo: yes
